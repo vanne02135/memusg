@@ -1,4 +1,4 @@
-A 'time'-like utility for Unix that measures peak memory usage.
+A 'time'-like utility for Unix that measures memory usage.
 
 Works in both interactive and non-interactive environments.
 
@@ -14,3 +14,6 @@ Example:
 ```bash
 memusg sleep 2
 ```
+
+Reports both current memory usage (with user defined INTERVAL) 
+and peak memory. 

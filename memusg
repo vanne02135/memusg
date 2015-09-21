@@ -8,6 +8,8 @@ from subprocess import *
 # -d          : debug mode
 
 
+INTERVAL = 5 # Memory logging interval in seconds
+
 out = sys.stderr
 DEBUG = False
 
@@ -70,12 +72,17 @@ if fork_pid == 0:
     proc = Popen(child_command, stdin=None, stdout=None, stderr=None, env=None, shell=True)
 
     vmpeak = -1
+    t_start = os.times()[4]
+    
     while proc.returncode == None:
-        vmpeak = max(get_vsize(sid), vmpeak)
+        vm = get_vsize(sid)
+        vmpeak = max(vm, vmpeak)
+        t_cur = os.times()[4] - t_start
+        out.write("%f, %d\n" % (t_cur, vm))
         log("Waiting for child to exit. vmpeak={}".format(vmpeak))
         proc.poll()
-        sleep(0.1) # Time in seconds (float)
-    
+        sleep(INTERVAL) # Time in seconds (float)
+
     out.write("memusg: vmpeak: {} kb\n".format(vmpeak))
 
     status = proc.returncode
